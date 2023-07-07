@@ -2,7 +2,7 @@ import pandas as pd
 import re
 
 #get CSV data and turn this into a dataframe
-file_path = "C:\Users\patri\Documents\GitHub\Rhedeg\src\data\ParcBrynBachResults - Results (All Time) (1).csv"
+file_path = "src\data\ParcBrynBachResults - Results (All Time) (1).csv"
 df = pd.read_csv(file_path)
 
 #Get the 25 recent PBs
@@ -77,7 +77,7 @@ print(all_time_df)
 ###Now write it to a file
 pb_html_table = all_time_df.to_html(classes='data-table')
 
-with open("/workspaces/my_cv.github.io/canlyniadaur/TableTemplate.html", "r") as file:
+with open("pages\canlyniadaur\TableTemplate.html", "r") as file:
     existing_html = file.read()
 
 # Define the placeholder element
@@ -87,5 +87,5 @@ placeholder = '<!-- INSERT_PANDAS_HTML -->'
 modified_html = existing_html.replace(placeholder, pb_html_table)
 
 # Save the modified HTML to a file
-with open('/workspaces/my_cv.github.io/canlyniadaur/ClubRecords.html', 'w') as file:
+with open('pages\canlyniadaur\ClubRecords.html', 'w') as file:
     file.write(modified_html)
