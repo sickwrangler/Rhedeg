@@ -1,23 +1,9 @@
 import pandas as pd
 import re
 
-#get CSV data and turn this into a dataframe
+# get CSV data and turn it into a dataframe
 file_path = "src\data\ParcBrynBachResults - Results (All Time) (1).csv"
 df = pd.read_csv(file_path)
-
-#Get the 25 recent PBs
-personal_bests = df.query("Best == 'PB'")
-latest_pbs = personal_bests.head(25)
-columns_to_remove = ['Sex', 'Age Position','Gender Position', 'Best', 'Club Record', 'Location' ]
-latest_pbs = latest_pbs.drop(columns=columns_to_remove)
-
-#Get the 25 recent SBs
-season_bests = df.query("Best == 'SB'")
-latest_sbs = season_bests.head(25)
-columns_to_remove = ['Sex', 'Age Position','Gender Position', 'Best', 'Club Record', 'Location' ]
-latest_sbs = latest_sbs.drop(columns=columns_to_remove)
-
-#Get current club records
 
 # Function to convert time strings to timedelta format
 def convert_time(time_str):
@@ -51,17 +37,17 @@ def convert_time(time_str):
 df['Time'] = df['Time'].apply(convert_time)
 
 # Filter records where 'Club Record' is 'Y', distance is in the specified list, and Age Category is not 'Male' or 'Female'
-distances = ['Mile','3000', '5K', '10K', 'HM', 'Mar', 'parkrun']
+distances = ['Mile', '3000', '5K', '10K', 'HM', 'Mar', 'parkrun']
 filtered_df = df[(df['Distance'].isin(distances)) & (~df['Age Category'].isin(['Male', 'Female']))]
 
 # Find the all-time records for each distance, gender, and age category
 all_time_records = filtered_df.groupby(['Distance', 'Sex', 'Age Category'])['Time'].idxmin()
 
 # Create a new DataFrame with the all-time records
-all_time_df = filtered_df.loc[all_time_records]
+all_time_df = filtered_df.loc[all_time_records].copy()
 
 # Reset the index of the new DataFrame
-all_time_df = all_time_df.reset_index(drop=True)
+all_time_df.reset_index(drop=True, inplace=True)
 
 # Remove the days component from the timedelta values
 all_time_df['Time'] = all_time_df['Time'].dt.total_seconds().apply(pd.to_datetime, unit='s').dt.strftime('%H:%M:%S.%f').str.rstrip('0').str.rstrip('.')
@@ -70,22 +56,34 @@ all_time_df['Time'] = all_time_df['Time'].dt.total_seconds().apply(pd.to_datetim
 all_time_df['Time'] = all_time_df['Time'].apply(lambda x: x[3:] if x.startswith('00:') else x)
 
 # Drop unwanted columns
-columns_to_remove = ['Sex', 'Age Position','Gender Position', 'Best', 'Club Record', 'Location' ]
-all_time_df = all_time_df.drop(columns=columns_to_remove)
-print(all_time_df)
+columns_to_remove = ['Sex', 'Age Position', 'Gender Position', 'Best', 'Club Record', 'Location']
+all_time_df.drop(columns_to_remove, axis=1, inplace=True)
 
-###Now write it to a file
-pb_html_table = all_time_df.to_html(classes='data-table')
-
-with open("pages\canlyniadaur\TableTemplate.html", "r") as file:
+# Read the HTML template
+with open("pages/canlyniadaur/TableTemplate.html", "r") as file:
     existing_html = file.read()
 
 # Define the placeholder element
 placeholder = '<!-- INSERT_PANDAS_HTML -->'
 
-# Replace the placeholder with the generated HTML
-modified_html = existing_html.replace(placeholder, pb_html_table)
+# Get unique distances
+unique_distances = all_time_df['Distance'].unique()
 
-# Save the modified HTML to a file
-with open('pages\canlyniadaur\ClubRecords.html', 'w') as file:
-    file.write(modified_html)
+# Generate HTML tables for each distance group
+for distance in unique_distances:
+    # Filter data for the current distance
+    distance_df = all_time_df[all_time_df['Distance'] == distance].copy()
+
+    # Remove the 'Distance' column
+    distance_df.drop('Distance', axis=1, inplace=True)
+
+    # Generate HTML table
+    html_table = distance_df.to_html(classes='data-table')
+
+    # Modify HTML template
+    modified_html = existing_html.replace(placeholder, html_table)
+
+    # Save HTML to a file
+    file_name = f"pages/canlyniadaur/ClubRecords_{distance}.html"
+    with open(file_name, 'w') as file:
+        file.write(modified_html)
