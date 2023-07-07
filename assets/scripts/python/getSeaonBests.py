@@ -1,7 +1,7 @@
 import pandas as pd
 
 #get CSV data and turn this into a dataframe
-file_path = "/workspaces/my_cv.github.io/canlyniadaur/ParcBrynBachResults - Results (All Time) (1).csv"
+file_path = "C:\Users\patri\Documents\GitHub\Rhedeg\src\data\ParcBrynBachResults - Results (All Time) (1).csv"
 df = pd.read_csv(file_path)
 
 #Get the 25 recent SBs
