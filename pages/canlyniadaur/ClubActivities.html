@@ -11,11 +11,11 @@
       src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"
       type="text/javascript"
     ></script>
-    <script src="/Components/Navigation/navigation.js" defer></script>
+    <!-- <script src="/Components/Navigation/navigation.js" defer></script> -->
   </head>
   <body>
     <header-component></header-component>
-    <script src="/Components/Navigation/Navigation_active.js" defer></script>
+    <!-- <script src="/Components/Navigation/Navigation_active.js" defer></script> -->
     <h1>Parc Bryn Bach Bests</h1>
     <ul class="tab-links">
       <li><a href="#table1">Personal bests</a></li>
@@ -33,7 +33,31 @@
   <div id="table3" class="tab-content">
     <h2>Club records</h2>
     <h3>Mile</h3>
-    <iframe src="ClubRecords_Mile.html" id="RecordsTable" height="auto" width="100%" overflow="unset" frameborder="0"></iframe>
+    <iframe src="ClubRecords_Mile.html"  id="RecordsTable" height="auto" width="100%" frameborder="0"></iframe>
+    <script>
+        // Adjust the iframe height based on the received message
+  function adjustIframeHeight(event) {
+    if (event.origin === 'http://127.0.0.1:5500' && event.data.type === 'iframeHeight') {
+      var iframe = document.getElementById('RecordsTable');
+      iframe.style.height = event.data.height + 'px';
+    }
+  }
+
+  // Listen for postMessage events from the iframe
+  window.addEventListener('message', adjustIframeHeight, false);
+
+  // Adjust the iframe height when the table inside the iframe is loaded
+  var iframe = document.getElementById('RecordsTable');
+  iframe.addEventListener('load', function() {
+    var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+    var table = iframeDoc.querySelector('table');
+
+    if (table) {
+      var height = table.offsetHeight;
+      iframe.style.height = height + 'px';
+    }
+  });
+    </script>
     <h3>3000m</h3>
     <iframe src="ClubRecords_3000.html" id="RecordsTable" height="auto" width="100%" frameborder="0"></iframe>
     <h3>5k</h3>

@@ -1,2 +1,15 @@
 <link rel="stylesheet" type="text/css" href="/assets/styles/ClubActivities.css" />
+<script>
+// Send the iframe's height to the parent page
+
+function sendIframeHeight() {
+  debugger;
+  var height = document.body.scrollHeight;
+  parent.postMessage({ type: 'iframeHeight', height: height }, 'http://127.0.0.1:5500');
+}
+
+// Call sendIframeHeight when the iframe content finishes loading
+window.addEventListener('load', sendIframeHeight, false);
+</script>
+
  <!-- INSERT_PANDAS_HTML -->
