@@ -30,8 +30,8 @@
     <h2>Latest season bests</h2>
     <iframe src="/pages/canlyniadaur/ClubActivitiesSB.html" id="SBResultsTable" height="1200px" width="100%" frameborder="0"></iframe>
   </div>
-  <div id="table3" class="tab-content">
-    <h2>Club records</h2>
+  <!-- <div id="table3" class="tab-content"> -->
+    <!-- <h2>Club records</h2>
     <h3>Mile</h3>
     <iframe src="/pages/canlyniadaur/ClubRecords_Mile.html" id="RecordsTable" height="auto" width="100%" overflow="unset" frameborder="0"></iframe>
     <h3>3000m</h3>
@@ -44,6 +44,46 @@
     <iframe src="/pages/canlyniadaur/ClubRecords_HM.html" id="RecordsTable" height="auto" width="100%" frameborder="0"></iframe>
     <h3>Marathon</h3>
     <iframe src="/pages/canlyniadaur/ClubRecords_Mar.html" id="RecordsTable" height="auto" width="100%" frameborder="0"></iframe>
+  </div> -->
+  <div id="table3" class="tab-content">
+    <div class="expandable">
+      <h2>Club records</h2>
+      <button class="toggle-btn">Mile</button>
+      <div class="content">
+        <iframe src="/pages/canlyniadaur/ClubRecords_Mile.html" id="RecordsTable" height="auto" width="100%" overflow="unset" frameborder="0"></iframe>
+      </div>
+    </div>
+    <div class="expandable">
+      <button class="toggle-btn">3000m</button>
+      <div class="content">
+        <iframe src="/pages/canlyniadaur/ClubRecords_3000.html" id="RecordsTable" height="auto" width="100%" frameborder="0"></iframe>
+      </div>
+    </div>
+    <div class="expandable">
+      <button class="toggle-btn">5k</button>
+      <div class="content">
+        <iframe src="/pages/canlyniadaur/ClubRecords_5K.html" id="RecordsTable" height="auto" width="100%" frameborder="0"></iframe>
+      </div>
+    </div>
+    <div class="expandable">
+      <button class="toggle-btn">10k</button>
+      <div class="content">
+        <iframe src="/pages/canlyniadaur/ClubRecords_10K.html" id="RecordsTable" height="auto" width="100%" frameborder="0"></iframe>
+      </div>
+    </div>
+    <div class="expandable">
+      <button class="toggle-btn">Half marathon</button>
+      <div class="content">
+        <iframe src="/pages/canlyniadaur/ClubRecords_HM.html" id="RecordsTable" height="auto" width="100%" frameborder="0"></iframe>
+      </div>
+    </div>
+    <div class="expandable">
+      <button class="toggle-btn">Marathon</button>
+      <div class="content">
+        <iframe src="/pages/canlyniadaur/ClubRecords_Mar.html" id="RecordsTable" height="auto" width="100%" frameborder="0"></iframe>
+      </div>
+    </div>
+
   </div>
   <script>
     // Add event listeners to tab links
@@ -70,6 +110,14 @@
             this.classList.add('active');
         });
     }
+
+  src="https://code.jquery.com/jquery-3.6.0.min.js">
+
+  $(document).ready(function() {
+    $('.toggle-btn').click(function() {
+      $(this).siblings('.content').slideToggle();
+    });
+  });
 </script>
 
   </body>
